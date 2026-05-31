@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Hotel Booking{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+{% if user_id %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="/dashboard">&#127968; Hotel Booking</a>
+        <div class="navbar-nav ms-auto align-items-center">
+            {% if role == 'admin' %}
+            <a class="nav-link" href="/rooms">Rooms</a>
+            <a class="nav-link" href="/bookings">Bookings</a>
+            <a class="nav-link" href="/invoices">Invoices</a>
+            {% else %}
+            <a class="nav-link" href="/bookings">My Bookings</a>
+            <a class="nav-link" href="/invoices">My Invoices</a>
+            {% endif %}
+            <span class="nav-link text-secondary">{{ username }} ({{ role }})</span>
+            <form method="post" action="/logout" class="d-inline ms-2">
+                <button class="btn btn-outline-light btn-sm">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+{% endif %}
+
+<div class="container mt-4">
+    {% block content %}{% endblock %}
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

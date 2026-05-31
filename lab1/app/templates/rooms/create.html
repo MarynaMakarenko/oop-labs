@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Add Room{% endblock %}
+{% block content %}
+<h2 class="mb-4">Add New Room</h2>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<div class="card shadow-sm"><div class="card-body p-4">
+<form method="post" action="/rooms/new">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Room Number</label>
+            <input type="text" name="number" class="form-control" placeholder="e.g. 101" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Capacity (persons)</label>
+            <input type="number" name="capacity" class="form-control" min="1" max="20" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Apartment Class</label>
+            <select name="apartment_class" class="form-select" required>
+                {% for cls in apartment_classes %}
+                <option value="{{ cls }}">{{ cls | capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Price per Night ($)</label>
+            <input type="number" name="price_per_day" class="form-control" step="0.01" min="0.01" required>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="2"></textarea>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary">Create Room</button>
+        <a href="/rooms" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</form>
+</div></div>
+{% endblock %}

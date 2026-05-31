@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Invoices{% endblock %}
+{% block content %}
+<h2 class="mb-4">{% if role == 'admin' %}All Invoices{% else %}My Invoices{% endif %}</h2>
+{% if not invoices %}
+<div class="alert alert-info">No invoices found.</div>
+{% else %}
+<div class="table-responsive">
+<table class="table table-hover bg-white shadow-sm rounded">
+    <thead class="table-dark">
+        <tr><th>#</th><th>Booking</th><th>Period</th><th>Amount</th><th>Status</th><th>Issued</th>{% if role == 'client' %}<th></th>{% endif %}</tr>
+    </thead>
+    <tbody>
+    {% for inv in invoices %}
+    {% set b = bookings.get(inv.booking_id) %}
+    <tr>
+        <td>{{ inv.id }}</td>
+        <td><a href="/bookings/{{ inv.booking_id }}">#{{ inv.booking_id }}</a></td>
+        <td>{% if b %}{{ b.check_in }} — {{ b.check_out }}{% else %}—{% endif %}</td>
+        <td class="fw-bold">${{ "%.2f" | format(inv.amount) }}</td>
+        <td>
+            {% if inv.status == 'paid' %}<span class="badge bg-success">Paid</span>
+            {% else %}<span class="badge bg-danger">Unpaid</span>{% endif %}
+        </td>
+        <td class="text-muted small">{{ inv.issued_at }}</td>
+        {% if role == 'client' %}
+        <td>
+            {% if inv.status == 'unpaid' %}
+            <form method="post" action="/invoices/{{ inv.id }}/pay">
+                <button class="btn btn-sm btn-success">Pay</button>
+            </form>
+            {% endif %}
+        </td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% endif %}
+{% endblock %}

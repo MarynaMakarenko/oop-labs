@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Welcome, <strong>{{ username }}</strong>!</h2>
+
+{% if role == 'admin' %}
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-warning h-100">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-1">Pending Bookings</h6>
+                <h1 class="display-4 fw-bold">{{ pending_bookings|length }}</h1>
+                <a href="/bookings" class="btn btn-dark btn-sm">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-info h-100">
+            <div class="card-body">
+                <h6 class="card-subtitle mb-1">Total Rooms</h6>
+                <h1 class="display-4 fw-bold">{{ total_rooms }}</h1>
+                <a href="/rooms" class="btn btn-dark btn-sm">Manage</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if pending_bookings %}
+<h5>Requests awaiting review</h5>
+<table class="table table-hover bg-white rounded shadow-sm">
+    <thead class="table-dark">
+        <tr><th>#</th><th>Client ID</th><th>Class</th><th>Guests</th><th>Check-in</th><th>Check-out</th><th></th></tr>
+    </thead>
+    <tbody>
+    {% for b in pending_bookings %}
+    <tr>
+        <td>{{ b.id }}</td>
+        <td>{{ b.client_id }}</td>
+        <td>{{ b.apartment_class }}</td>
+        <td>{{ b.guests_count }}</td>
+        <td>{{ b.check_in }}</td>
+        <td>{{ b.check_out }}</td>
+        <td><a href="/bookings/{{ b.id }}" class="btn btn-sm btn-primary">Review</a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-success">No pending bookings.</div>
+{% endif %}
+
+{% else %}
+<div class="row g-3 mb-4">
+    <div class="col-md-4">
+        <div class="card text-bg-primary h-100">
+            <div class="card-body text-white">
+                <h6 class="card-subtitle mb-1">My Bookings</h6>
+                <h1 class="display-4 fw-bold">{{ bookings|length }}</h1>
+                <a href="/bookings" class="btn btn-light btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card text-bg-success h-100">
+            <div class="card-body text-white">
+                <h6 class="card-subtitle mb-1">My Invoices</h6>
+                <h1 class="display-4 fw-bold">{{ invoices|length }}</h1>
+                <a href="/invoices" class="btn btn-light btn-sm">View</a>
+            </div>
+        </div>
+    </div>
+</div>
+<a href="/bookings/new" class="btn btn-primary">+ New Booking</a>
+{% endif %}
+{% endblock %}

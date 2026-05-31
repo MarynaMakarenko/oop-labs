@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Edit Room {{ room.number }}{% endblock %}
+{% block content %}
+<h2 class="mb-4">Edit Room {{ room.number }}</h2>
+{% if error %}<div class="alert alert-danger">{{ error }}</div>{% endif %}
+<div class="card shadow-sm"><div class="card-body p-4">
+<form method="post" action="/rooms/{{ room.id }}/edit">
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Room Number</label>
+            <input type="text" name="number" class="form-control" value="{{ room.number }}" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Capacity (persons)</label>
+            <input type="number" name="capacity" class="form-control" value="{{ room.capacity }}" min="1" required>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Apartment Class</label>
+            <select name="apartment_class" class="form-select" required>
+                {% for cls in apartment_classes %}
+                <option value="{{ cls }}" {% if cls == room.apartment_class %}selected{% endif %}>{{ cls | capitalize }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Price per Night ($)</label>
+            <input type="number" name="price_per_day" class="form-control" value="{{ room.price_per_day }}" step="0.01" min="0.01" required>
+        </div>
+        <div class="col-12">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="2">{{ room.description }}</textarea>
+        </div>
+    </div>
+    <div class="mt-4">
+        <button type="submit" class="btn btn-warning">Save Changes</button>
+        <a href="/rooms" class="btn btn-secondary ms-2">Cancel</a>
+    </div>
+</form>
+</div></div>
+{% endblock %}
